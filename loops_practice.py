@@ -1,6 +1,7 @@
 import random
 import time
 
+
 class LoopsPractice:
 
     def print_numbers_list():
@@ -17,7 +18,7 @@ class LoopsPractice:
 
 
 class RosticsLoadImitation:
-    
+
     def imitate_load():
         it = 0
         while it < 10:
@@ -25,6 +26,7 @@ class RosticsLoadImitation:
                 print("Warning! Load > 85%")
             time.sleep(0.2)
             it += 1
+
 
 LoopsPractice.print_numbers_list()
 LoopsPractice.print_strings_list()
