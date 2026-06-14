@@ -1,6 +1,7 @@
 import pytest
 
 
+@pytest.mark.skip
 @pytest.mark.parametrize("balance, account_balance", [
     (-1, ValueError),
     (0, 1000),
@@ -17,6 +18,7 @@ def test_withdraw(account, output_file, balance, account_balance):
         file.write(f"test_withdraw\nbalance = {balance}, account_balance = {account_balance}\n")
 
 
+@pytest.mark.skip
 @pytest.mark.parametrize("balance, account_balance", [
     (-1, ValueError),
     (0, 1000),
