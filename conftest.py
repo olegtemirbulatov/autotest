@@ -1,5 +1,7 @@
 import pytest
+from playwright.sync_api import Page
 from bank_account import BankAccount
+from pages.translate_page import TranslatePage
 
 
 @pytest.fixture()
@@ -20,3 +22,9 @@ def output_file():
     yield filename
     with open(filename, '+a') as file:
         file.write("After test\n\n")
+
+@pytest.fixture()
+def translate_page(page: Page) -> TranslatePage:
+    tp = TranslatePage(page)
+    tp.open()
+    return tp
