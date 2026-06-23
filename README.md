@@ -30,3 +30,26 @@ Just run a command below:
 ```bash
 pytest .
 ```
+
+### Running UI tests (login to GitHub)
+Go to directory you want to keep the repo:
+```bash
+cd <root_directory_of_the_projects>
+```
+Create a file `.env`.
+
+Fill this file with your credentials to login to GitHub:
+```
+GH_USER = "<your email or username>"
+GH_PASS = "<your password>"
+```
+Run tests by the command below 
+```bash
+pytest . --headed
+```
+The flag `--headed` enables showing the browser window.
+Or just add this flag to pytest.ini:
+```
+[pytest]
+addopts = -ra --headed
+```
