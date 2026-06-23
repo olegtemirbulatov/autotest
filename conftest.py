@@ -1,7 +1,9 @@
 import pytest
+import os
+from dotenv import load_dotenv
 from playwright.sync_api import Page
 from bank_account import BankAccount
-from pages.translate_page import TranslatePage
+from pages.github_page import GithubPage
 
 
 @pytest.fixture()
@@ -24,7 +26,8 @@ def output_file():
         file.write("After test\n\n")
 
 @pytest.fixture()
-def translate_page(page: Page) -> TranslatePage:
-    tp = TranslatePage(page)
+def github_page(page: Page) -> GithubPage:
+    load_dotenv()
+    tp = GithubPage(page)
     tp.open()
     return tp
