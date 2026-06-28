@@ -7,5 +7,6 @@ from dotenv import load_dotenv
 def driver():
     load_dotenv()
     driver = webdriver.Chrome()
+    driver.maximize_window()
     yield driver
     driver.quit()
