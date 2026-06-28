@@ -1,9 +1,8 @@
 import pytest
-import os
 from dotenv import load_dotenv
 from playwright.sync_api import Page
 from bank_account import BankAccount
-from pages.github_page import GithubPage
+from pages.login_page import LoginPage
 
 
 @pytest.fixture()
@@ -26,8 +25,9 @@ def output_file():
         file.write("After test\n\n")
 
 @pytest.fixture()
-def github_page(page: Page) -> GithubPage:
+def login_page(page: Page) -> LoginPage:
     load_dotenv()
-    tp = GithubPage(page)
-    tp.open()
-    return tp
+    url = "https://github.com/"
+    lp = LoginPage(page, url)
+    lp.open()
+    return lp
