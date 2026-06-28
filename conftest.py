@@ -1,9 +1,12 @@
 import pytest
+import os
 from dotenv import load_dotenv
 from playwright.sync_api import Page
 from bank_account import BankAccount
 from pages.login_page import LoginPage
 
+
+load_dotenv()
 
 @pytest.fixture()
 def account():
@@ -26,8 +29,8 @@ def output_file():
 
 @pytest.fixture()
 def login_page(page: Page) -> LoginPage:
-    load_dotenv()
-    url = "https://github.com/"
-    lp = LoginPage(page, url)
-    lp.open()
-    return lp
+    return LoginPage(page, "https://github.com/")
+
+@pytest.fixture()
+def gh_credentials():
+    return os.getenv("GH_USER"), os.getenv("GH_PASS")
