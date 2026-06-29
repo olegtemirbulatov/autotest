@@ -30,16 +30,12 @@ def output_file():
         file.write("After test\n\n")
 
 @pytest.fixture()
-def login_page(page: Page):
-    yield LoginPage(page, BASE_URL)
+def home_page(page: Page):
+    yield HomePage(page, BASE_URL)
 
 @pytest.fixture()
 def gh_credentials():
     yield os.getenv("GH_USER"), os.getenv("GH_PASS")
-
-@pytest.fixture()
-def home_page(page: Page):
-    yield HomePage(page, BASE_URL)
 
 @pytest.fixture()
 def gh_name():

@@ -5,7 +5,6 @@ from pages.base_page import BasePage
 class LoginPage(BasePage):
 
     def login(self, username: str, password: str):
-        self.page.get_by_role("link", name="Sign in").click()
         self.page.get_by_label("Username").fill(username)
         self.page.get_by_label("Password").fill(password)
         self.page.get_by_role("button", name="Sign in").click()
