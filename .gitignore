@@ -2,3 +2,10 @@
 __pycache__
 .pytest_cache
 .env
+.vscode
+
+
+# Файлы, не относящиеся к проекту
+lab_work.py
+lab_work2.py
+test.txt
