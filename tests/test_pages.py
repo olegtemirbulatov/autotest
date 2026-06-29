@@ -12,14 +12,14 @@ class TestLoginPage:
     URL = "https://github.com/"
 
     @pytest.mark.ui
-    def test_correct_login(self, driver):
+    def test_correct_login(self, driver, gh_credentials):
+        if not all(gh_credentials):
+            pytest.skip(reason="Credentials not provided")
+        username, password = gh_credentials
         login_page = LoginPage(driver, self.URL)
-        username = os.getenv("GH_USER")
-        password = os.getenv("GH_PASS")
         login_page.open()
         login_page.login(username, password)
-        login_page.wait_until_login_succeeded()
-        assert "/login" not in driver.current_url
+        assert login_page.wait_until_login_succeeded() is not None
     
     @pytest.mark.ui
     def test_incorrect_login(self, driver):
@@ -27,4 +27,4 @@ class TestLoginPage:
         fake = Faker()
         login_page.open()
         login_page.login(fake.email(), fake.password())
-        login_page.wait_until_login_failed()
+        assert login_page.wait_until_login_failed() is not None

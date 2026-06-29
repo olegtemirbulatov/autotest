@@ -34,11 +34,11 @@ class LoginPage(BasePage):
         return self
     
     def wait_until_login_succeeded(self):
-        self.wait.until(
+        return self.wait.until(
             ec.presence_of_element_located(self.SUCCESS_ELEMENT_LOCATOR)
         )
 
     def wait_until_login_failed(self):
-        self.wait.until(
+        return self.wait.until(
             ec.presence_of_element_located(self.ERROR_ALERT_LOCATOR)
         )
