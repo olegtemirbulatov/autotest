@@ -4,20 +4,13 @@ from selenium.webdriver.common.by import By
 
 
 class LoginPage(BasePage):
-    SIGN_IN_LINK_LOCATOR = (By.CSS_SELECTOR, "a.HeaderMenu-link--sign-in")
     LOGIN_FIELD_LOCATOR = (By.ID, "login_field")
     PASSWORD_FIELD_LOCATOR = (By.ID, "password")
     SIGN_IN_BUTTON_LOCATOR = (By.NAME, "commit")
-    SUCCESS_ELEMENT_LOCATOR = (By.CSS_SELECTOR, "span.styles-module__contextCrumbLast__tI2e3")
+    SUCCESS_ELEMENT_LOCATOR = (By.XPATH, "//span[text()='Dashboard']")
     ERROR_ALERT_LOCATOR = (By.CSS_SELECTOR, "div[role='alert']")
 
     def login(self, username: str, password: str) -> LoginPage:
-        sign_in_link = self.wait.until(
-            ec.element_to_be_clickable(self.SIGN_IN_LINK_LOCATOR)
-        )
-        sign_in_link.click()
-        self.wait.until(lambda d: "/login" in d.current_url)
-
         login_field = self.wait.until(
             ec.presence_of_element_located(self.LOGIN_FIELD_LOCATOR)
         )
