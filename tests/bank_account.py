@@ -1,4 +1,4 @@
-class BankAccount():
+class BankAccount:
     def __init__(self, owner: str, balance: float):
         self.owner = owner
         self.balance = balance
@@ -7,7 +7,7 @@ class BankAccount():
         if balance < 0:
             raise ValueError("Сумма должна быть положительной")
         self.balance += balance
-    
+
     def withdraw(self, balance: int):
         if balance < 0:
             raise ValueError("Сумма должна быть положительной")
