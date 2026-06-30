@@ -38,7 +38,7 @@ cd <root_directory_of_the_projects>
 ```
 Create a file `.env`.
 
-Fill this file with your credentials to login to GitHub:
+Fill this file with your credentials to login to GitHub (**happy path**):
 ```
 GH_USER = "<your email or username>"
 GH_PASS = "<your password>"

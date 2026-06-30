@@ -1,12 +1,15 @@
 import pytest
 from faker import Faker
+
 from pages.github.home_page import HomePage
 
 
 class TestLoginPage:
 
     @pytest.mark.ui
-    def test_correct_sign_in(self, github_home_page: HomePage, gh_credentials: tuple[str, str]):
+    def test_correct_sign_in(
+        self, github_home_page: HomePage, gh_credentials: tuple[str, str]
+    ):
         if not all(gh_credentials):
             pytest.skip(reason="Credentials not provided")
         username, password = gh_credentials
@@ -16,23 +19,24 @@ class TestLoginPage:
         login_page.expect_login_succeeded()
 
     @pytest.mark.ui
-    def test_incorrect_sign_in(self, github_home_page: HomePage):
-        fake = Faker()
+    def test_incorrect_sign_in(self, github_home_page: HomePage, faker: Faker):
         github_home_page.open()
         login_page = github_home_page.go_to_login()
-        login_page.login(fake.email(), fake.password())
+        login_page.login(faker.email(), faker.password())
         login_page.expect_login_failed()
 
 
 class TestContactingSalesPage:
 
     @pytest.mark.ui
-    def test_filling_name_in_contact_sales_page(self, github_home_page: HomePage, gh_name):
-        if not all(gh_name):
-            pytest.skip(reason="First and last names not provided")
-        first_name, last_name = gh_name
+    def test_filling_name_in_contact_sales_page(
+        self, github_home_page: HomePage, faker: Faker
+    ):
+        first_name, last_name = faker.first_name(), faker.last_name()
         github_home_page.open()
-        contact_sales_page = github_home_page.go_to_solutions().select_ci_cd().click_contact_sales()
+        contact_sales_page = (
+            github_home_page.go_to_solutions().select_ci_cd().click_contact_sales()
+        )
         contact_sales_page.fill_form(first_name, last_name)
         contact_sales_page.expect_form_filled(first_name, last_name)
 
