@@ -1,7 +1,7 @@
 from pages.base_page import BasePage
-from pages.components.solutions_menu import SolutionsMenu
-from pages.topics_page import TopicsPage
-from pages.login_page import LoginPage
+from pages.github.components.solutions_menu import SolutionsMenu
+from pages.github.topics_page import TopicsPage
+from pages.github.login_page import LoginPage
 
 
 class HomePage(BasePage):

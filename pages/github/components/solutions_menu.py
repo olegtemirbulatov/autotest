@@ -1,5 +1,5 @@
 from playwright.sync_api import Page
-from pages.ci_cd_page import CiCdPage
+from pages.github.ci_cd_page import CiCdPage
 
 
 class SolutionsMenu:
