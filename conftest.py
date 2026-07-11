@@ -57,3 +57,12 @@ def output_file():
     yield filename
     with open(filename, "+a") as file:
         file.write("After test\n\n")
+
+
+@pytest.fixture()
+def login_credentials():
+    payload = {
+        "username": os.getenv("username"),
+        "password": os.getenv("password")
+    }
+    yield payload
