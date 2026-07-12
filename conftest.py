@@ -36,6 +36,12 @@ def ddg_search_page(page: Page):
     yield SearchPage(page, GOOGLE_URL)
 
 
+# JSONPLACEHOLDER
+@pytest.fixture()
+def client_session():
+    
+
+
 # OTHER
 @pytest.fixture()
 def account():
