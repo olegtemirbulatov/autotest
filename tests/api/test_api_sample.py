@@ -1,7 +1,6 @@
 import requests
 import pytest
 
-
 URL = "https://some_url"
 
 

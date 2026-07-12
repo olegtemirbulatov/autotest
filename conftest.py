@@ -4,6 +4,7 @@ import pytest
 from dotenv import load_dotenv
 from faker import Faker
 from playwright.sync_api import Page
+import httpx
 
 from pages.duckduckgo.search_page import SearchPage
 from pages.github.home_page import HomePage
@@ -38,8 +39,9 @@ def ddg_search_page(page: Page):
 
 # JSONPLACEHOLDER
 @pytest.fixture()
-def client_session():
-    
+def http_client():
+    with httpx.Client() as client:
+        yield client
 
 
 # OTHER
@@ -67,8 +69,5 @@ def output_file():
 
 @pytest.fixture()
 def login_credentials():
-    payload = {
-        "username": os.getenv("username"),
-        "password": os.getenv("password")
-    }
+    payload = {"username": os.getenv("username"), "password": os.getenv("password")}
     yield payload

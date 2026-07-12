@@ -2,7 +2,7 @@ from pydantic import BaseModel, Field, field_validator, ConfigDict
 
 
 class User(BaseModel):
-    model_config = ConfigDict(extra='ignore', from_attributes=True)
+    model_config = ConfigDict(extra="ignore", from_attributes=True)
 
     id: int = Field(..., gt=0)
     name: str = Field(..., min_length=1, max_length=200)
