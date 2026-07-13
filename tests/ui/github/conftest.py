@@ -1,9 +1,10 @@
 import os
 
 import pytest
-from faker import Faker
 from dotenv import load_dotenv
+from faker import Faker
 from playwright.sync_api import Page
+
 from pages.github.home_page import HomePage
 
 GITHUB_URL = "https://github.com/"

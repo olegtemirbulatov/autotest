@@ -1,6 +1,7 @@
 import pytest
-from pages.duckduckgo.search_page import SearchPage
 from playwright.sync_api import Page
+
+from pages.duckduckgo.search_page import SearchPage
 
 DDG_URL = "https://duckduckgo.com/"
 

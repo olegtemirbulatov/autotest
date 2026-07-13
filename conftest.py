@@ -1,6 +1,7 @@
 import os
 
 import pytest
+
 from tests.bank_account import BankAccount
 
 
