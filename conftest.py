@@ -1,39 +1,8 @@
 import os
 
 import pytest
-from dotenv import load_dotenv
-from faker import Faker
-from playwright.sync_api import Page
 
-from pages.duckduckgo.search_page import SearchPage
-from pages.github.home_page import HomePage
 from tests.bank_account import BankAccount
-
-load_dotenv()
-GITHUB_URL = "https://github.com/"
-GOOGLE_URL = "https://duckduckgo.com/"
-
-
-# GITHUB
-@pytest.fixture()
-def github_home_page(page: Page):
-    yield HomePage(page, GITHUB_URL)
-
-
-@pytest.fixture()
-def gh_credentials():
-    yield os.getenv("GH_USER"), os.getenv("GH_PASS")
-
-
-@pytest.fixture()
-def faker():
-    yield Faker()
-
-
-# DUCKDUCKGO
-@pytest.fixture()
-def ddg_search_page(page: Page):
-    yield SearchPage(page, GOOGLE_URL)
 
 
 # OTHER
@@ -61,8 +30,5 @@ def output_file():
 
 @pytest.fixture()
 def login_credentials():
-    payload = {
-        "username": os.getenv("username"),
-        "password": os.getenv("password")
-    }
+    payload = {"username": os.getenv("username"), "password": os.getenv("password")}
     yield payload

@@ -1,6 +1,5 @@
-import requests
 import pytest
-
+import requests
 
 URL = "https://some_url"
 
@@ -10,7 +9,7 @@ URL = "https://some_url"
 def test_get_users():
     response = requests.get(f"{URL}/api/users?page=2")
     assert response.status_code == 200
-    assert response.json()["field"] == "some value"
+    assert response.json()["body"] == "some value"
 
 
 @pytest.mark.skip(reason="This is a sample test")
