@@ -1,14 +1,14 @@
 class BankAccount:
-    def __init__(self, owner: str, balance: float):
+    def __init__(self, owner: str, balance: float) -> None:
         self.owner = owner
         self.balance = balance
 
-    def deposit(self, balance: int):
+    def deposit(self, balance: int) -> None:
         if balance < 0:
             raise ValueError("Сумма должна быть положительной")
         self.balance += balance
 
-    def withdraw(self, balance: int):
+    def withdraw(self, balance: int) -> None:
         if balance < 0:
             raise ValueError("Сумма должна быть положительной")
         if balance > self.balance:

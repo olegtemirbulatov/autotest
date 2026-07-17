@@ -1,4 +1,4 @@
-from playwright.sync_api import expect
+from playwright.sync_api import Locator, expect
 
 from pages.base_page import BasePage
 
@@ -6,11 +6,11 @@ from pages.base_page import BasePage
 class ContactSalesPage(BasePage):
 
     @property
-    def first_name_input(self):
+    def first_name_input(self) -> Locator:
         return self.page.get_by_role("textbox", name="First name")
 
     @property
-    def last_name_input(self):
+    def last_name_input(self) -> Locator:
         return self.page.get_by_role("textbox", name="Last name")
 
     def fill_form(self, first_name: str, last_name: str) -> None:
@@ -19,7 +19,7 @@ class ContactSalesPage(BasePage):
         self.first_name_input.fill(first_name)
         self.last_name_input.fill(last_name)
 
-    def expect_form_filled(self, first_name: str, last_name: str):
+    def expect_form_filled(self, first_name: str, last_name: str) -> None:
         expect(self.page.get_by_role("textbox", name="First name")).to_have_value(
             first_name
         )

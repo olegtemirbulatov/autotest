@@ -9,7 +9,7 @@ TIMEOUT = 10
 # HAPPY PATH
 @pytest.mark.integration
 @pytest.mark.api
-def test_get_post(json_placeholder_client: JsonPlaceholderClient):
+def test_get_post(json_placeholder_client: JsonPlaceholderClient) -> None:
     response = json_placeholder_client.get_post(post_id=1)
     assert response.status_code == 200
     Post.model_validate(response.json())
@@ -17,7 +17,7 @@ def test_get_post(json_placeholder_client: JsonPlaceholderClient):
 
 @pytest.mark.integration
 @pytest.mark.api
-def test_get_posts_list(json_placeholder_client: JsonPlaceholderClient):
+def test_get_posts_list(json_placeholder_client: JsonPlaceholderClient) -> None:
     response = json_placeholder_client.get_posts_list(userId=1)
     assert response.status_code == 200
     posts_list = response.json()
@@ -30,7 +30,7 @@ def test_get_posts_list(json_placeholder_client: JsonPlaceholderClient):
 @pytest.mark.api
 def test_create_post(
     json_placeholder_client: JsonPlaceholderClient, post_creation_payload
-):
+) -> None:
     response = json_placeholder_client.create_post(**post_creation_payload)
     assert response.status_code == 201
     creation_post_result = Post.model_validate(response.json())
@@ -43,7 +43,7 @@ def test_create_post(
 
 @pytest.mark.integration
 @pytest.mark.api
-def test_delete_post(json_placeholder_client: JsonPlaceholderClient):
+def test_delete_post(json_placeholder_client: JsonPlaceholderClient) -> None:
     response = json_placeholder_client.delete_post(post_id=1)
     assert response.status_code == 200
 
@@ -52,6 +52,8 @@ def test_delete_post(json_placeholder_client: JsonPlaceholderClient):
 @pytest.mark.integration
 @pytest.mark.api
 @pytest.mark.parametrize("post_id", [-1, 0, 99999])
-def test_get_post_failure(json_placeholder_client: JsonPlaceholderClient, post_id: int):
+def test_get_post_failure(
+    json_placeholder_client: JsonPlaceholderClient, post_id: int
+) -> None:
     with pytest.raises(ValueError, match="Передан несуществующий ID"):
         json_placeholder_client.get_post(post_id=post_id)  # Non existent ID

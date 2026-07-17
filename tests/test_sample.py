@@ -1,11 +1,18 @@
 import pytest
 
+from tests.bank_account import BankAccount
+
 
 @pytest.mark.skip
 @pytest.mark.parametrize(
     "balance, account_balance", [(-1, ValueError), (0, 1000), (1, 999)]
 )
-def test_withdraw(account, output_file, balance, account_balance):
+def test_withdraw(
+    account: BankAccount,
+    output_file: str,
+    balance: int,
+    account_balance: int | type[ValueError],
+) -> None:
     if account_balance is ValueError:
         with pytest.raises(ValueError):
             account.withdraw(balance)
@@ -22,7 +29,12 @@ def test_withdraw(account, output_file, balance, account_balance):
 @pytest.mark.parametrize(
     "balance, account_balance", [(-1, ValueError), (0, 1000), (1, 1001)]
 )
-def test_deposit(account, output_file, balance, account_balance):
+def test_deposit(
+    account: BankAccount,
+    output_file: str,
+    balance: int,
+    account_balance: int | type[ValueError],
+) -> None:
     if account_balance is ValueError:
         with pytest.raises(ValueError):
             account.deposit(balance)

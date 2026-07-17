@@ -17,11 +17,12 @@ class JsonPlaceholderClient:
         except requests.exceptions.Timeout:
             raise RuntimeError(f"Сервер не ответил за {self.timeout} секунд") from None
         except requests.exceptions.HTTPError as ex:
+            assert ex.response is not None
             if ex.response.status_code == 404:
                 raise ValueError("Передан несуществующий ID") from ex
             raise
 
-    def get_posts_list(self, userId: int = None) -> requests.Response:
+    def get_posts_list(self, userId: int) -> requests.Response:
         url = f"{self.base_url}/posts?userId={userId}"
         try:
             response = self.session.get(url=url, timeout=self.timeout)
@@ -30,13 +31,14 @@ class JsonPlaceholderClient:
         except requests.exceptions.Timeout:
             raise RuntimeError(f"Сервер не ответил за {self.timeout} секунд") from None
         except requests.exceptions.HTTPError as ex:
+            assert ex.response is not None
             if ex.response.status_code == 400:
                 raise ValueError("Некорректные параметры запроса") from ex
             raise
 
     def create_post(self, title: str, body: str, userId: int) -> requests.Response:
         url = f"{self.base_url}/posts"
-        payload = {"title": title, "body": body, "userId": userId}
+        payload: dict[str, str | int] = {"title": title, "body": body, "userId": userId}
         try:
             response = self.session.post(url=url, json=payload, timeout=self.timeout)
             response.raise_for_status()
@@ -44,7 +46,8 @@ class JsonPlaceholderClient:
         except requests.exceptions.Timeout:
             raise RuntimeError(f"Сервер не ответил за {self.timeout} секунд") from None
         except requests.exceptions.HTTPError as ex:
-            if ex.response.status_code == 400:
+            assert ex.response is not None
+            if ex.response is not None and ex.response.status_code == 400:
                 raise ValueError("Неверные данные поста") from ex
             raise
 
@@ -57,6 +60,7 @@ class JsonPlaceholderClient:
         except requests.exceptions.Timeout:
             raise RuntimeError(f"Сервер не ответил за {self.timeout} секунд") from None
         except requests.exceptions.HTTPError as ex:
+            assert ex.response is not None
             if ex.response.status_code == 404:
                 raise ValueError("Передан несуществующий ID") from ex
             raise

@@ -12,3 +12,10 @@ exclude = '''
   | \.pytest_cache
 )/
 '''
+
+[tool.mypy]
+exclude = [
+    "lab_work\\.py$",
+    "lab_work2\\.py$",
+    "loops_practice\\.py$"
+]

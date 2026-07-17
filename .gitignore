@@ -3,6 +3,7 @@ __pycache__
 .pytest_cache
 .env
 .vscode
+.mypy_cache
 
 
 # Файлы, не относящиеся к проекту
