@@ -19,3 +19,7 @@ exclude = [
     "lab_work2\\.py$",
     "loops_practice\\.py$"
 ]
+
+[[tool.mypy.overrides]]
+module = ["tests.*", "conftest"] 
+disable_error_code = ["untyped-decorator"]

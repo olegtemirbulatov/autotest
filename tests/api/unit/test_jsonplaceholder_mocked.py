@@ -1,4 +1,5 @@
 import json
+from typing import Dict
 from urllib.parse import parse_qs, urlparse
 
 import pytest
@@ -160,7 +161,8 @@ def test_get_posts_list_timeout_mocked(
 
 @responses.activate
 def test_create_post_mocked(
-    json_placeholder_client: JsonPlaceholderClient, post_creation_payload
+    json_placeholder_client: JsonPlaceholderClient,
+    post_creation_payload: Dict[str, str | int],
 ) -> None:
     mock_response = {**post_creation_payload, "id": 101}
     responses.add(
@@ -170,7 +172,11 @@ def test_create_post_mocked(
         status=201,
     )
 
-    response = json_placeholder_client.create_post(**post_creation_payload)
+    response = json_placeholder_client.create_post(
+        str(post_creation_payload["title"]),
+        str(post_creation_payload["body"]),
+        int(post_creation_payload["userId"]),
+    )
 
     assert response.status_code == 201
     result = Post.model_validate(response.json())
@@ -180,9 +186,9 @@ def test_create_post_mocked(
 
     # Проверяем, что тело запроса ушло корректно
 
-    body = responses.calls[0].request.body
-    assert isinstance(body, (str, bytes))
-    sent_body = json.loads(body)
+    response_body = responses.calls[0].request.body
+    assert isinstance(response_body, (str, bytes))
+    sent_body = json.loads(response_body)
     assert sent_body == post_creation_payload
 
 
@@ -202,7 +208,8 @@ def test_create_post_invalid_data_mocked(
 
 @responses.activate
 def test_create_post_server_error_mocked(
-    json_placeholder_client: JsonPlaceholderClient, post_creation_payload
+    json_placeholder_client: JsonPlaceholderClient,
+    post_creation_payload: Dict[str, str | int],
 ) -> None:
     responses.add(
         responses.POST,
@@ -211,12 +218,17 @@ def test_create_post_server_error_mocked(
     )
 
     with pytest.raises(requests.exceptions.HTTPError):
-        json_placeholder_client.create_post(**post_creation_payload)
+        json_placeholder_client.create_post(
+            str(post_creation_payload["title"]),
+            str(post_creation_payload["body"]),
+            int(post_creation_payload["userId"]),
+        )
 
 
 @responses.activate
 def test_create_post_timeout_mocked(
-    json_placeholder_client: JsonPlaceholderClient, post_creation_payload
+    json_placeholder_client: JsonPlaceholderClient,
+    post_creation_payload: Dict[str, str | int],
 ) -> None:
     responses.add(
         responses.POST,
@@ -225,7 +237,11 @@ def test_create_post_timeout_mocked(
     )
 
     with pytest.raises(RuntimeError, match=f"Сервер не ответил за {TIMEOUT} секунд"):
-        json_placeholder_client.create_post(**post_creation_payload)
+        json_placeholder_client.create_post(
+            str(post_creation_payload["title"]),
+            str(post_creation_payload["body"]),
+            int(post_creation_payload["userId"]),
+        )
 
 
 # ---------- delete_post ----------

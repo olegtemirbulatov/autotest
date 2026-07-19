@@ -14,7 +14,7 @@ def test_get_users() -> None:
 
 @pytest.mark.skip(reason="This is a sample test")
 @pytest.mark.api
-def test_login(login_credentials) -> None:
+def test_login(login_credentials: dict[str, str | None]) -> None:
     response = requests.post(f"{URL}/api/login", json=login_credentials)
     assert response.status_code == 200
     assert response.json()["token"]

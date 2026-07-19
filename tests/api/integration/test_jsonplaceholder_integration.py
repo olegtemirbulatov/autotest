@@ -1,3 +1,5 @@
+from typing import Dict
+
 import pytest
 
 from api.json_placeholder_api_client import JsonPlaceholderClient
@@ -29,9 +31,14 @@ def test_get_posts_list(json_placeholder_client: JsonPlaceholderClient) -> None:
 @pytest.mark.integration
 @pytest.mark.api
 def test_create_post(
-    json_placeholder_client: JsonPlaceholderClient, post_creation_payload
+    json_placeholder_client: JsonPlaceholderClient,
+    post_creation_payload: Dict[str, str | int],
 ) -> None:
-    response = json_placeholder_client.create_post(**post_creation_payload)
+    response = json_placeholder_client.create_post(
+        str(post_creation_payload["title"]),
+        str(post_creation_payload["body"]),
+        int(post_creation_payload["userId"]),
+    )
     assert response.status_code == 201
     creation_post_result = Post.model_validate(response.json())
 
