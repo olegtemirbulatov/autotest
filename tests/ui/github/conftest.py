@@ -3,6 +3,7 @@ from collections.abc import Generator
 from typing import Tuple
 
 import pytest
+import allure
 from dotenv import load_dotenv
 from faker import Faker
 from playwright.sync_api import Page

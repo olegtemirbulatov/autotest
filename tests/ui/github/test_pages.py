@@ -1,4 +1,5 @@
 import pytest
+import allure
 from faker import Faker
 
 from pages.github.home_page import HomePage
@@ -48,4 +49,5 @@ class TestTopicsPageContents:
         expected_topics = {"Python", "React", "CSS"}
         github_home_page.open()
         popular_topics_list = github_home_page.go_to_topics().get_popular_topics()
-        assert expected_topics.issubset(popular_topics_list)
+        with allure.step("Check if expected topics are subset of popular topics"):
+            assert expected_topics.issubset(popular_topics_list)

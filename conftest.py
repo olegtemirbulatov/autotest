@@ -4,6 +4,7 @@ from collections.abc import Generator
 import pytest
 
 from tests.bank_account import BankAccount
+from utils.allure_reporter import AllureReporter
 
 
 # OTHER
@@ -33,3 +34,15 @@ def output_file() -> Generator[str, None, None]:
 def login_credentials() -> Generator[dict[str, str | None], None, None]:
     payload = {"username": os.getenv("username"), "password": os.getenv("password")}
     yield payload
+
+
+@pytest.hookimpl(hookwrapper=True, tryfirst=True)
+def pytest_runtest_makereport(item, call):
+    """Хук, который вызывается после каждого этапа теста. Работает даже без @allure.step в тесте."""
+    outcome = yield
+    report = outcome.get_result()
+    
+    if report.when == "call" and report.failed:
+        page = item.funcargs.get("page")
+        if page:
+            AllureReporter.attach_on_failure(page, item.name)
