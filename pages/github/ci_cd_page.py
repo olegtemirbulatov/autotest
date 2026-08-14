@@ -1,6 +1,7 @@
+import allure
+
 from pages.base_page import BasePage
 from pages.github.contact_sales_page import ContactSalesPage
-import allure
 
 
 class CiCdPage(BasePage):

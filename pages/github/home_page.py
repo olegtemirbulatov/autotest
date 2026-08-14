@@ -1,8 +1,9 @@
+import allure
+
 from pages.base_page import BasePage
 from pages.github.components.solutions_menu import SolutionsMenu
 from pages.github.login_page import LoginPage
 from pages.github.topics_page import TopicsPage
-import allure
 
 
 class HomePage(BasePage):

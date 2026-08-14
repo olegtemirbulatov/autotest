@@ -1,6 +1,6 @@
 from typing import Self
-import allure
 
+import allure
 from playwright.sync_api import Page
 
 

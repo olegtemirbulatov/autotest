@@ -1,5 +1,5 @@
-import pytest
 import allure
+import pytest
 from faker import Faker
 
 from pages.github.home_page import HomePage

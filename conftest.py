@@ -2,6 +2,8 @@ import os
 from collections.abc import Generator
 
 import pytest
+from playwright.sync_api import Page
+from pluggy import Result
 
 from tests.bank_account import BankAccount
 from utils.allure_reporter import AllureReporter
@@ -37,12 +39,17 @@ def login_credentials() -> Generator[dict[str, str | None], None, None]:
 
 
 @pytest.hookimpl(hookwrapper=True, tryfirst=True)
-def pytest_runtest_makereport(item, call):
-    """Хук, который вызывается после каждого этапа теста. Работает даже без @allure.step в тесте."""
+def pytest_runtest_makereport(
+    item: pytest.Function, call: pytest.CallInfo[None]
+) -> Generator[None, Result[pytest.TestReport], None]:
+    """
+    Хук, который вызывается после каждого этапа теста.
+    Работает даже без @allure.step в тесте.
+    """
     outcome = yield
     report = outcome.get_result()
-    
+
     if report.when == "call" and report.failed:
         page = item.funcargs.get("page")
-        if page:
+        if isinstance(page, Page):
             AllureReporter.attach_on_failure(page, item.name)
