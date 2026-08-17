@@ -10,11 +10,9 @@ class SearchPage(BasePage):
 
     @allure.step("Fill search form and click Search button")
     def search(self, query: str) -> Self:
-        self.page.get_by_role("combobox", name="Поиск в DuckDuckGo").click()
-        self.page.get_by_role("combobox", name="Поиск в DuckDuckGo").fill(query)
-        self.page.get_by_test_id("searchbox-form").locator("button").filter(
-            has_text="Поиск"
-        ).click()
+        self.page.locator("#searchbox_input").click()
+        self.page.locator("#searchbox_input").fill(query)
+        self.page.locator("button[data-mode='search']").click()
         return self
 
     @allure.step("Expect search result")

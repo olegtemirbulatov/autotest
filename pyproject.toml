@@ -31,5 +31,5 @@ exclude = [
 ]
 
 [[tool.mypy.overrides]]
-module = ["tests.*", "conftest"] 
+module = ["tests.*", "conftest", "pages.*"] 
 disable_error_code = ["untyped-decorator"]

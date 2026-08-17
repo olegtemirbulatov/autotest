@@ -8,6 +8,7 @@ from pages.github.home_page import HomePage
 class TestLoginPage:
 
     @pytest.mark.ui
+    @pytest.mark.skip(reason="Code from email needed")
     def test_correct_sign_in(
         self, github_home_page: HomePage, gh_credentials: tuple[str, str]
     ) -> None:
