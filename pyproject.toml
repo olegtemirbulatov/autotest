@@ -1,5 +1,5 @@
 [tool.pytest.ini_options]
-addopts = "-ra --headed --alluredir=reports/allure --reruns 2 --reruns-delay 1"
+addopts = "-ra --alluredir=reports/allure --reruns 2 --reruns-delay 1"
 markers = [
     "smoke : быстрые smoke-тесты",
     "ui : UI тесты",
