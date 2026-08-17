@@ -38,6 +38,23 @@ def login_credentials() -> Generator[dict[str, str | None], None, None]:
     yield payload
 
 
+def pytest_collection_modifyitems(
+    config: pytest.Config, items: list[pytest.Item]
+) -> None:
+    """
+    Скипает тесты с меткой @pytest.mark.headed_only, если запуск идёт без --headed.
+    Причина: некоторые сайты (например DuckDuckGo) показывают капчу
+    при детекте headless-браузера, из-за чего тест падает не по вине кода.
+    """
+    if not config.getoption("--headed"):
+        skip_headless = pytest.mark.skip(
+            reason="Требуется --headed: сайт показывает капчу в headless-режиме"
+        )
+        for item in items:
+            if "headed_only" in item.keywords:
+                item.add_marker(skip_headless)
+
+
 @pytest.hookimpl(hookwrapper=True, tryfirst=True)
 def pytest_runtest_makereport(
     item: pytest.Function, call: pytest.CallInfo[None]

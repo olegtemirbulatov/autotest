@@ -10,8 +10,8 @@ class SearchPage(BasePage):
 
     @allure.step("Fill search form and click Search button")
     def search(self, query: str) -> Self:
-        self.page.locator("#searchbox_input").click()
-        self.page.locator("#searchbox_input").fill(query)
+        self.page.locator("input[id='searchbox_input']").click()
+        self.page.locator("input[id='searchbox_input']").fill(query)
         self.page.locator("button[data-mode='search']").click()
         return self
 

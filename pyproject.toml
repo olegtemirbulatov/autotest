@@ -5,7 +5,8 @@ markers = [
     "ui : UI тесты",
     "api : API тесты",
     "mocked : замокированные API тесты",
-    "integration : API тесты, которые ходят в сеть"
+    "integration : API тесты, которые ходят в сеть",
+    "headed_only: тест требует запуска в --headed режиме (антибот-защита сайта в headless)"
 ]
 
 [tool.black]
