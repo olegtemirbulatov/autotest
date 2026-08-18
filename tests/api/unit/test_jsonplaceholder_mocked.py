@@ -1,3 +1,7 @@
+import json
+from typing import Dict
+from urllib.parse import parse_qs, urlparse
+
 import pytest
 import requests
 import responses
@@ -15,7 +19,7 @@ pytestmark = [pytest.mark.api, pytest.mark.mocked]
 
 
 @responses.activate
-def test_get_post_mocked(json_placeholder_client: JsonPlaceholderClient):
+def test_get_post_mocked(json_placeholder_client: JsonPlaceholderClient) -> None:
     mock_post = {"id": 1, "title": "Test title", "body": "Test body", "userId": 1}
     responses.add(
         responses.GET,
@@ -29,11 +33,16 @@ def test_get_post_mocked(json_placeholder_client: JsonPlaceholderClient):
     assert response.status_code == 200
     Post.model_validate(response.json())
     assert len(responses.calls) == 1
-    assert responses.calls[0].request.url.endswith("/posts/1")
+
+    url = responses.calls[0].request.url
+    assert url is not None
+    assert url.endswith("/posts/1")
 
 
 @responses.activate
-def test_get_post_not_found_mocked(json_placeholder_client: JsonPlaceholderClient):
+def test_get_post_not_found_mocked(
+    json_placeholder_client: JsonPlaceholderClient,
+) -> None:
     responses.add(
         responses.GET,
         f"{BASE_URL}/posts/999999999",
@@ -45,7 +54,9 @@ def test_get_post_not_found_mocked(json_placeholder_client: JsonPlaceholderClien
 
 
 @responses.activate
-def test_get_post_server_error_mocked(json_placeholder_client: JsonPlaceholderClient):
+def test_get_post_server_error_mocked(
+    json_placeholder_client: JsonPlaceholderClient,
+) -> None:
     responses.add(
         responses.GET,
         f"{BASE_URL}/posts/1",
@@ -57,7 +68,9 @@ def test_get_post_server_error_mocked(json_placeholder_client: JsonPlaceholderCl
 
 
 @responses.activate
-def test_get_post_timeout_mocked(json_placeholder_client: JsonPlaceholderClient):
+def test_get_post_timeout_mocked(
+    json_placeholder_client: JsonPlaceholderClient,
+) -> None:
     responses.add(
         responses.GET,
         f"{BASE_URL}/posts/1",
@@ -72,7 +85,7 @@ def test_get_post_timeout_mocked(json_placeholder_client: JsonPlaceholderClient)
 
 
 @responses.activate
-def test_get_posts_list_mocked(json_placeholder_client: JsonPlaceholderClient):
+def test_get_posts_list_mocked(json_placeholder_client: JsonPlaceholderClient) -> None:
     mock_posts = [
         {"id": 1, "title": "Title 1", "body": "Body 1", "userId": 1},
         {"id": 2, "title": "Title 2", "body": "Body 2", "userId": 1},
@@ -91,11 +104,17 @@ def test_get_posts_list_mocked(json_placeholder_client: JsonPlaceholderClient):
     assert isinstance(posts_list, list)
     for post in posts_list:
         Post.model_validate(post)
-    assert responses.calls[0].request.params == {"userId": "1"}
+    url = responses.calls[0].request.url
+    assert url is not None
+    query = parse_qs(urlparse(url).query)
+    assert query == {"userId": ["1"]}
+    # assert responses.calls[0].request.params == {"userId": "1"}
 
 
 @responses.activate
-def test_get_posts_list_empty_mocked(json_placeholder_client: JsonPlaceholderClient):
+def test_get_posts_list_empty_mocked(
+    json_placeholder_client: JsonPlaceholderClient,
+) -> None:
     responses.add(
         responses.GET,
         f"{BASE_URL}/posts",
@@ -112,7 +131,7 @@ def test_get_posts_list_empty_mocked(json_placeholder_client: JsonPlaceholderCli
 @responses.activate
 def test_get_posts_list_invalid_params_mocked(
     json_placeholder_client: JsonPlaceholderClient,
-):
+) -> None:
     responses.add(
         responses.GET,
         f"{BASE_URL}/posts",
@@ -124,7 +143,9 @@ def test_get_posts_list_invalid_params_mocked(
 
 
 @responses.activate
-def test_get_posts_list_timeout_mocked(json_placeholder_client: JsonPlaceholderClient):
+def test_get_posts_list_timeout_mocked(
+    json_placeholder_client: JsonPlaceholderClient,
+) -> None:
     responses.add(
         responses.GET,
         f"{BASE_URL}/posts",
@@ -140,8 +161,9 @@ def test_get_posts_list_timeout_mocked(json_placeholder_client: JsonPlaceholderC
 
 @responses.activate
 def test_create_post_mocked(
-    json_placeholder_client: JsonPlaceholderClient, post_creation_payload
-):
+    json_placeholder_client: JsonPlaceholderClient,
+    post_creation_payload: Dict[str, str | int],
+) -> None:
     mock_response = {**post_creation_payload, "id": 101}
     responses.add(
         responses.POST,
@@ -150,7 +172,11 @@ def test_create_post_mocked(
         status=201,
     )
 
-    response = json_placeholder_client.create_post(**post_creation_payload)
+    response = json_placeholder_client.create_post(
+        str(post_creation_payload["title"]),
+        str(post_creation_payload["body"]),
+        int(post_creation_payload["userId"]),
+    )
 
     assert response.status_code == 201
     result = Post.model_validate(response.json())
@@ -159,16 +185,17 @@ def test_create_post_mocked(
     assert result.userId == post_creation_payload["userId"]
 
     # Проверяем, что тело запроса ушло корректно
-    import json
 
-    sent_body = json.loads(responses.calls[0].request.body)
+    response_body = responses.calls[0].request.body
+    assert isinstance(response_body, (str, bytes))
+    sent_body = json.loads(response_body)
     assert sent_body == post_creation_payload
 
 
 @responses.activate
 def test_create_post_invalid_data_mocked(
     json_placeholder_client: JsonPlaceholderClient,
-):
+) -> None:
     responses.add(
         responses.POST,
         f"{BASE_URL}/posts",
@@ -181,8 +208,9 @@ def test_create_post_invalid_data_mocked(
 
 @responses.activate
 def test_create_post_server_error_mocked(
-    json_placeholder_client: JsonPlaceholderClient, post_creation_payload
-):
+    json_placeholder_client: JsonPlaceholderClient,
+    post_creation_payload: Dict[str, str | int],
+) -> None:
     responses.add(
         responses.POST,
         f"{BASE_URL}/posts",
@@ -190,13 +218,18 @@ def test_create_post_server_error_mocked(
     )
 
     with pytest.raises(requests.exceptions.HTTPError):
-        json_placeholder_client.create_post(**post_creation_payload)
+        json_placeholder_client.create_post(
+            str(post_creation_payload["title"]),
+            str(post_creation_payload["body"]),
+            int(post_creation_payload["userId"]),
+        )
 
 
 @responses.activate
 def test_create_post_timeout_mocked(
-    json_placeholder_client: JsonPlaceholderClient, post_creation_payload
-):
+    json_placeholder_client: JsonPlaceholderClient,
+    post_creation_payload: Dict[str, str | int],
+) -> None:
     responses.add(
         responses.POST,
         f"{BASE_URL}/posts",
@@ -204,14 +237,18 @@ def test_create_post_timeout_mocked(
     )
 
     with pytest.raises(RuntimeError, match=f"Сервер не ответил за {TIMEOUT} секунд"):
-        json_placeholder_client.create_post(**post_creation_payload)
+        json_placeholder_client.create_post(
+            str(post_creation_payload["title"]),
+            str(post_creation_payload["body"]),
+            int(post_creation_payload["userId"]),
+        )
 
 
 # ---------- delete_post ----------
 
 
 @responses.activate
-def test_delete_post_mocked(json_placeholder_client: JsonPlaceholderClient):
+def test_delete_post_mocked(json_placeholder_client: JsonPlaceholderClient) -> None:
     responses.add(
         responses.DELETE,
         f"{BASE_URL}/posts/1",
@@ -226,7 +263,9 @@ def test_delete_post_mocked(json_placeholder_client: JsonPlaceholderClient):
 
 
 @responses.activate
-def test_delete_post_not_found_mocked(json_placeholder_client: JsonPlaceholderClient):
+def test_delete_post_not_found_mocked(
+    json_placeholder_client: JsonPlaceholderClient,
+) -> None:
     responses.add(
         responses.DELETE,
         f"{BASE_URL}/posts/999999999",
@@ -240,7 +279,7 @@ def test_delete_post_not_found_mocked(json_placeholder_client: JsonPlaceholderCl
 @responses.activate
 def test_delete_post_server_error_mocked(
     json_placeholder_client: JsonPlaceholderClient,
-):
+) -> None:
     responses.add(
         responses.DELETE,
         f"{BASE_URL}/posts/1",
@@ -252,7 +291,9 @@ def test_delete_post_server_error_mocked(
 
 
 @responses.activate
-def test_delete_post_timeout_mocked(json_placeholder_client: JsonPlaceholderClient):
+def test_delete_post_timeout_mocked(
+    json_placeholder_client: JsonPlaceholderClient,
+) -> None:
     responses.add(
         responses.DELETE,
         f"{BASE_URL}/posts/1",

@@ -1,3 +1,5 @@
+from collections.abc import Generator
+
 import pytest
 from playwright.sync_api import Page
 
@@ -7,5 +9,5 @@ DDG_URL = "https://duckduckgo.com/"
 
 
 @pytest.fixture()
-def ddg_search_page(page: Page):
+def ddg_search_page(page: Page) -> Generator[SearchPage, None, None]:
     yield SearchPage(page, DDG_URL)

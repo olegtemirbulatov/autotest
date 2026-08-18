@@ -1,8 +1,11 @@
-./venv
+venv
 __pycache__
 .pytest_cache
 .env
 .vscode
+.mypy_cache
+reports
+allure-report
 
 
 # Файлы, не относящиеся к проекту

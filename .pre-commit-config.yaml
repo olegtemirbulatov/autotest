@@ -1,0 +1,25 @@
+repos:
+  - repo: https://github.com/pycqa/isort
+    rev: 9.0.0b1
+    hooks:
+      - id: isort
+        args: [--profile=black]
+  
+  - repo: https://github.com/psf/black
+    rev: 26.5.1
+    hooks:
+      - id: black
+        exclude: '^(\.venv|venv|build|dist|\.vscode|\.env|\.pytest_cache)/'
+
+  - repo: https://github.com/pycqa/flake8
+    rev: 7.3.0
+    hooks:
+      - id: flake8
+
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v2.3.0
+    hooks:
+      - id: mypy
+        args: [--strict, --explicit-package-bases, --ignore-missing-imports] 
+        additional_dependencies: [types-requests, pydantic, playwright]
+        exclude: '(lab_work\.py|lab_work2\.py|loops_practice\.py)$'

@@ -1,3 +1,14 @@
+[tool.pytest.ini_options]
+addopts = "-ra --alluredir=reports/allure --reruns 2 --reruns-delay 1"
+markers = [
+    "smoke : быстрые smoke-тесты",
+    "ui : UI тесты",
+    "api : API тесты",
+    "mocked : замокированные API тесты",
+    "integration : API тесты, которые ходят в сеть",
+    "headed_only: тест требует запуска в --headed режиме (антибот-защита сайта в headless)"
+]
+
 [tool.black]
 line-length = 88
 target-version = ['py311']
@@ -12,3 +23,14 @@ exclude = '''
   | \.pytest_cache
 )/
 '''
+
+[tool.mypy]
+exclude = [
+    "lab_work\\.py$",
+    "lab_work2\\.py$",
+    "loops_practice\\.py$"
+]
+
+[[tool.mypy.overrides]]
+module = ["tests.*", "conftest", "pages.*"] 
+disable_error_code = ["untyped-decorator"]
